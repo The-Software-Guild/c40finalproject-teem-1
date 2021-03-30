@@ -45,10 +45,10 @@ class DrinkTable extends Component {
         console.log(this.props.drinks)
         return (
             
-            <Table striped bordered hover variant="dark">
+            <Table responsive striped bordered hover variant="dark" >
         <thead>
           <tr>
-            <th>#</th>
+           
             <th>ID</th>
             <th>Name</th>
             <th>Category</th>
@@ -59,13 +59,14 @@ class DrinkTable extends Component {
         </thead>
         <tbody>
           
-        </tbody>
+      
                 
                 {this.props.drinks.map((drink, i) => {
                  
-                    return <div><DrinkRow drink={drink}  /></div>
+                    return <DrinkRow drink={drink}  />
                                   
                 })}
+                  </tbody>
                 </Table>
             
         )

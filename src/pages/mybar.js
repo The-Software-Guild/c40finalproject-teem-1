@@ -25,6 +25,7 @@ class MyBar extends Component {
       this.loadDrinks()
       
     }
+    
     loadDrinks(){
    
         fetch(ALL_PATH)
@@ -34,6 +35,7 @@ class MyBar extends Component {
             this.setState({drinks: data.drinks})
           })
       }
+
       getIngredients(url){
    
         fetch(url)
@@ -43,6 +45,7 @@ class MyBar extends Component {
             this.setState({ingredient: data})
           })
       }
+
     render() {
       
         return (
