@@ -6,6 +6,7 @@ import NavBar from "./components/navbar"
 import All from "./pages/all"
 import HomePage from './pages/home'
 import MyBar from "./pages/mybar"
+import Instructions from "./pages/instructions"
 
  
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
                         <Route path='/home' component={HomePage} />
                         <Route path='/mybar' component={MyBar} />
                         <Route path='/all' component={All} />
+                        <Route path='/instructions/:id' component={Instructions} />
                     </Switch>
                 </main>
             </div>
