@@ -8,8 +8,31 @@ import HomePage from './pages/home'
 import MyBar from "./pages/mybar"
 import Instructions from "./pages/instructions"
 
- 
-class App extends Component {
+const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
+class App extends React.Component{
+  state = {
+   ingredient: "",
+    drinkData: [
+      {
+        "Id": 1,
+        "Name": "Product",
+       
+     
+      }]
+    
+   
+  }
+  getIngredients(url){
+   
+    fetch(url)
+      .then(data => data.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ingredient: data})
+      })
+  }
+
+
     render() {
         return (
             <div className="App">
