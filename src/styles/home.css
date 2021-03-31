@@ -1,0 +1,29 @@
+#homePage {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../styles/img/BarBackground.jpg');
+    background-size: cover;
+    background-color: black;
+    color: white;
+    height: 100vh;
+    padding: 7%;
+}
+.thick {
+    border: 1px solid  white;
+    max-width: 50%;
+}
+.center {
+    text-align: center;
+}
+.card{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 40%;
+    min-width: 50%;
+    margin-top: 1.25em;
+    background-color: rgba(0, 0, 0, 0.575) !important;
+}
+.special-card {
+    color: white;
+    border-style: solid !important;
+    border-color: white !important;
+    border-radius: 10px !important;
+}
