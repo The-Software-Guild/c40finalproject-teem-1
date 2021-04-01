@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Col, Row, Button } from 'react-bootstrap'
 import DrinkTable from '../components/drinktableV2'
-
+import { withRouter, useHistory } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/allPage.css'
 
@@ -30,16 +30,58 @@ class allPage extends Component {
             }],
         searchCategory: '',
         searchTerm: '',
-        filteredDrinks: []
+        filteredDrinks: [],
+        location: React.PropTypes
       }
     }
     
     
+
+
+
     componentDidMount() {
-        if (this.state.drinks === undefined || this.state.drinks.length == 0) {
+
+        if (!this.props.match.params.element && (this.state.drinks === undefined || this.state.drinks.length == 0)) {
             this.loadAllDrinks()
+        }else{
+
+            this.loadDrinksFromURL();
+
         }
     }
+
+    loadDrinksFromURL = () => {
+        let element = this.props.match.params.element
+                if(element){
+                    element = element.replace(/%20/g, " ");
+                }
+                // if(this.props.match.params){
+                this.setState({
+                    searchTerm: this.props.match.params.element,
+                    searchCategory: this.props.match.params.category
+        
+                }, () => {
+                    this.getDrinks();
+                })
+    }
+    
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            if (!this.props.match.params.element) {
+                this.setState({
+                    searchTerm: "",
+                    searchCategory: ""
+        
+                }, () => {
+                    this.loadAllDrinks()
+                })
+                
+            }else{
+                this.loadDrinksFromURL();
+            }
+        }
+    }
+
 
     loadAllDrinks = (event) =>  {
         fetch("https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=")
@@ -109,33 +151,37 @@ class allPage extends Component {
         let { drinks } = this.state;
 
         return (
-            <div id="all_page">
-                <h1 id="all_page_title">Available Drinks</h1>
-                <Col md={{ span: 6, offset: 3 }}>
-                    <Row className="drinkSearch">
-                        <Col>
-                            <select className="form-select form-control mr-2" value={this.state.searchCategory} onChange={this.changeCategory} >
-                                <option value="" key="-1" disabled >Select Category...</option>
-                                {this.state.categories.map((category, index) => {
-                                    if(category){
-                                        return <option key={index} value={category.category}>{category.name}</option>
-                                    }
-                                })}
-                            </select>
-                        </Col>
-                        <Col>
-                            <input type="search" className="form-control rounded" onChange={this.inputChange} placeholder="Search" aria-label="Search"
-                                aria-describedby="search-addon" />
-                        </Col>
-                        <Button id="drinkSearchButton" size="sm" onClick={this.getDrinks}>Search Drinks</Button>
-                    </Row>
-                </Col>
+            <div>
 
-                <DrinkTable drinkData = {drinks}></DrinkTable>
-                <Button id="searchDrinkButton"variant="Secondary" onClick={this.loadAllDrinks}>See All Drinks</Button>
+                <div id="all_page">
+                    <h1 id="all_page_title">Available Drinks</h1>
+                    <Col md={{ span: 6, offset: 3 }}>
+                        <Row className="drinkSearch">
+                            <Col>
+                                <select className="form-select form-control mr-2" value={this.state.searchCategory} onChange={this.changeCategory} >
+                                    <option value="" key="-1" disabled >Select Category...</option>
+                                    {this.state.categories.map((category, index) => {
+                                        if(category){
+                                            return <option key={index} value={category.category}>{category.name}</option>
+                                        }
+                                    })}
+                                </select>
+                            </Col>
+                            <Col>
+                                <input type="search" className="form-control rounded" onChange={this.inputChange} value={this.state.searchTerm} placeholder="Search" aria-label="Search"
+                                    aria-describedby="search-addon" />
+                            </Col>
+                            <Button id="drinkSearchButton" size="sm" onClick={this.getDrinks}>Search Drinks</Button>
+                        </Row>
+                    </Col>
+
+                    <DrinkTable drinkData = {drinks}></DrinkTable>
+                    <Button id="searchDrinkButton"variant="Secondary" onClick={this.loadAllDrinks}>See All Drinks</Button>
+                </div>
             </div>
+
         )
     }
 }
  
-export default allPage
+export default withRouter(allPage)

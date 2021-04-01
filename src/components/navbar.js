@@ -2,24 +2,36 @@ import React, {Component} from "react"
 import { Link } from 'react-router-dom'
 import "../styles/navbar.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { withRouter } from "react-router";
 
 class NavBar extends Component {
     constructor(props){
         super(props);
-        
+        this.tmp = this.props.match.params;
         this.state = {
-            categories: [],
-            selectedCategory: "",
+            categories: [
+                {
+                    "category": "s",
+                    "name": "Drink Name"
+                },
+                {
+                    "category": "c",
+                    "name": "Drink Category"
+                },
+                {
+                    "category": "a",
+                    "name": "Contains Alcohol"
+                },
+                {
+                    "category": "g",
+                    "name": "Glass Type"
+                }],
+            selectedCategory: "s",
             elementSearched: ""
         }
     }
     handleSearchedElement = (event) => {
         console.log(this.state.selectedCategory + " " + this.state.elementSearched);
-    }
-
-    componentDidMount = () =>{
-        this.loadCategories();
     }
 
     handleSearch = (event) => {
@@ -30,22 +42,8 @@ class NavBar extends Component {
     handleCategory = (event) => {
         console.log(event.target.value);
         this.setState({selectedCategory: event.target.value})
-
     }
 
-    loadCategories() {
-        this.setState({ loading: true })
-        console.log("Loading contact data")
-        
-        fetch(`https://www.thecocktaildb.com/api/json/v2/9973533/list.php?c=list`)
-        .then(data => data.json())
-        .then(data => this.setState(
-            { 
-                categories: data.drinks,
-                selectedCategory: data.drinks[0].strCategory
-            }
-        ))
-    }    
     render () {
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -70,16 +68,16 @@ class NavBar extends Component {
                         <select className="form-select form-control mr-2" onChange={this.handleCategory} >
                             {this.state.categories.map((category, index) => {
                                 if(category){
-                                    return <option key={index} value={category.strCategory}>{category.strCategory}</option>
+                                    return <option key={index} value={category.category}>{category.name}</option>
                                 }
                             })}
                         </select>
                         <div className="input-group rounded">
                             <input type="search" className="form-control rounded" onChange={this.handleSearch} placeholder="Search" aria-label="Search"
-                                aria-describedby="search-addon" />
-                            <span className="input-group-text border-0" onClick={this.handleSearchedElement} id="search-addon">
-                                <i className="fas fa-search"></i>
-                            </span>
+                                aria-describedby="search-addon" disabled={this.state.selectedCategory === ""}/>
+                            <button className="input-group-text border-0" id="search-addon" disabled={this.state.elementSearched === ""}>
+                                <Link to={'/find/' + this.state.selectedCategory + "/" + this.state.elementSearched} ><i className="fas fa-search"></i></Link>
+                            </button>
                         </div>
                         </form>
                     </div>
@@ -89,4 +87,4 @@ class NavBar extends Component {
     }
 }
  
-export default NavBar
+export default withRouter(NavBar)
