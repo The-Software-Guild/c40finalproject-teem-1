@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import React, { Component } from "react"
 import { Switch, Route } from "react-router-dom"
 import DrinkTable from "../components/drinktable"
-import DrinkTable2 from "../components/drinktablev2"
+import DrinkTable2 from "../components/drinktableV2"
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 const ALL_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s="
