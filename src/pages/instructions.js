@@ -52,35 +52,29 @@ class Instructions extends Component {
 
 
         return (
-            <Container fluid>
-                <Row className="justify-content-center">
-
-                    <Col md={3} className="mt-5"><img className="img-fluid" src={this.state.cocktail.strDrinkThumb}/></Col>
-                </Row>
-                <Row className="justify-content-center">
-                    <Col md={3} className="mt-5"><label>Name: </label> {this.state.cocktail.strDrink}</Col>
-                </Row>
-                <Row className="justify-content-center">
-                    <Col md={3} className="mt-5"><label>Category: </label> {this.state.cocktail.strCategory}</Col>
-                </Row>
-                <Row className="justify-content-center">
-                    <Col md={2} className="mt-5"><label>Ingredients:</label>
-
-                        <ul>
-                        {this.state.ingredients.map((i, index) => {
-                            if(i){
-                                return <li key={index} className="text-left">{i}</li>
-                            }
-                        })}
-                            
-                        </ul>
-                    </Col>
-                </Row>
-                <Row className="mb-5 justify-content-center">
-                    <Col md={3} className="mt-5"><label>Instructions: </label><br/> {this.state.cocktail.strInstructions}</Col>
-                </Row>
-                
-            </Container>
+                <div className="card bg-light">
+                    <div className="row no-gutters">
+                        <div className="col md-4">
+                            <img className="card-img" src={this.state.cocktail.strDrinkThumb}/>
+                        </div>
+                        <div className="col md-8">
+                            <div className="card-body">
+                                <h3 className="card-title">{this.state.cocktail.strDrink}</h3>
+                                <h6 className="card-title">{this.state.cocktail.strCategory}</h6>
+                                <ul style={{columns: '2'}}>
+                                    {this.state.ingredients.map((i, index) => {
+                                        if(i){
+                                            return <li key={index} className="text-left">{i}</li>
+                                        }
+                                    })} 
+                                </ul>
+                                <p>{this.state.cocktail.strInstructions}</p>
+                                <p className="card-text text-sm-center text-muted">Last updated on {this.state.cocktail.dateModified}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
         );
     }
 }
