@@ -79,6 +79,7 @@ class allPage extends Component {
             }else{
                 this.loadDrinksFromURL();
             }
+            this.setState({location: prevProps.location.pathname});
         }
     }
 
