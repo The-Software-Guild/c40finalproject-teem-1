@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { Col, Row, Button } from 'react-bootstrap'
 import DrinkTable from '../components/drinktableV2'
 import { withRouter, useHistory } from 'react-router-dom';
+import Autocomplete from '../components/autocomplete'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/allPage.css'
 
@@ -9,7 +10,14 @@ import '../styles/allPage.css'
 class allPage extends Component {
     constructor(props) {
         super(props);
+        //allSearchTerms = for testing autocomplete
+        this.allSearchTerms =[
+            'Margarita',
+            'Shot glass',
+            'Non Alcoholic'
+        ];
         this.state = {
+        //used to populate drinks table
         drinks: [],
         categories: [
             {
@@ -28,23 +36,28 @@ class allPage extends Component {
                 "category": "g",
                 "name": "Glass Type"
             }],
+
+        //Used for drink search
         searchCategory: '',
         searchTerm: '',
         filteredDrinks: [],
-        location: React.PropTypes
+        
+        location: React.PropTypes,
+
+        //for Autocomplete
+        allTerms: [],
+        suggestions: [],
       }
     }
     
-    
-
 
 
     componentDidMount() {
 
         if (!this.props.match.params.element && (this.state.drinks === undefined || this.state.drinks.length == 0)) {
             this.loadAllDrinks()
-        }else{
-
+        }
+        else {
             this.loadDrinksFromURL();
 
         }
@@ -84,6 +97,7 @@ class allPage extends Component {
     }
 
 
+    //Retrienve list of all drinks from API
     loadAllDrinks = (event) =>  {
         fetch("https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=")
           .then(data => data.json())
@@ -93,15 +107,27 @@ class allPage extends Component {
           })
     }
     
-    inputChange = (event) => {
-        let inputValue = event.currentTarget.value; 
-        console.log(`input= ` + inputValue)
-        this.setState({ searchTerm: inputValue }, () => {
-            console.log(`search term = ${this.state.searchTerm}`);
-        });
+    //For Autocomplete
+    onTextChange = (event) => {
+        const value = event.target.value
+        let suggestions = [];
+        if (value.length > 0) {
+            const regex = new RegExp(`^${value}`, 'i');
+            suggestions = this.allSearchTerms.sort().filter(v => regex.test(v));
+        }
+        this.setState(() => ({ suggestions, searchTerm: value }))  
+    } 
+
+    //For Autocomplete
+    suggestedSelected = (search) => {
+        this.setState(() => ({
+            searchTerm: search,
+            suggestions: []
+        }))
     }
 
 
+    //For changing category on searches
     changeCategory = (event) => {
         console.log(`Current search Category: ${this.state.searchCategory}`)
         let value = event.currentTarget.value;
@@ -111,6 +137,7 @@ class allPage extends Component {
         );
     }
 
+    //For retrieving drinks from API based on search category and input from user
     getDrinks = (event) => {
         console.log(`search category = ${this.state.searchCategory}`)
         console.log(`search term = ${this.state.searchTerm}`)
@@ -149,7 +176,7 @@ class allPage extends Component {
 
     
     render() {
-        let { drinks } = this.state;
+        let { drinks, searchTerm, suggestions } = this.state;
 
         return (
             <div>
@@ -169,8 +196,12 @@ class allPage extends Component {
                                 </select>
                             </Col>
                             <Col>
-                                <input type="search" className="form-control rounded" onChange={this.inputChange} value={this.state.searchTerm} placeholder="Search" aria-label="Search"
-                                    aria-describedby="search-addon" />
+                                <Autocomplete 
+                                    inputChange={this.onTextChange}
+                                    suggestions={suggestions}
+                                    suggestedSelected={this.suggestedSelected}
+                                    searchTerm={searchTerm}
+                                />
                             </Col>
                             <Button id="drinkSearchButton" size="sm" onClick={this.getDrinks}>Search Drinks</Button>
                         </Row>
