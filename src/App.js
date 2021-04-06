@@ -15,16 +15,7 @@ import {observer} from 'mobx-react'
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 class App extends React.Component{
 
-  
-  getIngredients(url){
-   
-    fetch(url)
-      .then(data => data.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ingredient: data})
-      })
-  }
+
 
 
     render() {
@@ -36,7 +27,7 @@ class App extends React.Component{
                     <Switch>
                         <Route exact path='/' component={HomePage} />
                         <Route path='/home' component={HomePage} />
-                        <Route path='/mybar' component={MyBar} />
+                        <Route path='/mybar' component={MyBar}  />
                         <Route path='/all' component={All} />
                         <Route path='/instructions/:id' component={Instructions} />
                     </Switch>

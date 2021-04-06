@@ -271,4 +271,4 @@ class MyBar extends Component {
     
 }
  
-export default MyBar
+export default observer(MyBar)
