@@ -7,6 +7,16 @@ import DrinkTable2 from "../components/drinktableV2"
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import '../styles/mybar.css'
 import MyBarTable from "../components/myBarTable"
+import NavBar from "../components/navbar"
+import All from "./all"
+import HomePage from './home'
+
+import Instructions from "./instructions"
+import UserStore from "../stores/UserStore"
+import LoginForm from "../components/LoginForm"
+import InputField from "../components/InputField"
+import SubmitButton from "../components/SubmitButton"
+import {observer} from 'mobx-react'
 
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 const ALL_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s="
@@ -33,13 +43,81 @@ class MyBar extends Component {
 
       }
     
-    componentDidMount() {
-
-      this.loadDrinks()
-      this.getIngredients();
+    async componentDidMount() {
+     this.loadDrinks();
+     this.getIngredients();
+        try{
+          let res = await fetch('/isLoggedIn', {
+            method: 'post',
+            header: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
+    
+          let result = await res.json();
+    
+          if(result && result.success){
+            UserStore.loading = false;
+            UserStore.isLoggedIn = true;
+            UserStore.username = result.username;
+            
+          }
+          else{
+            UserStore.loading = false;
+            UserStore.isLoggedIn = false;
+          }
+    
+    
+        }
+        catch(e){
+          UserStore.loading =false;
+          UserStore.isLoggedIn = false;
+        }
      
-    }
-   
+      }
+    
+      
+    async doLogout() {
+    
+        try{
+          let res = await fetch('/logout', {
+            method: 'post',
+            header: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
+    
+          let result = await res.json();
+    
+          if(result && result.success){
+            UserStore.isLoggedIn = false;
+            UserStore.username = '';
+          
+          }
+    
+    
+        }
+        catch(e){
+          console.log(e);
+        }
+    
+      }
+      state = {
+       ingredient: "",
+        drinkData: [
+          {
+            "Id": 1,
+            "Name": "Product",
+           
+         
+          }]
+        
+       
+      }
+      
+
     loadDrinks(){
    
         fetch(ALL_PATH)
@@ -75,7 +153,7 @@ class MyBar extends Component {
       
 
               });
-           
+           console.log(this.state.ingredientList);
       
       }
    
@@ -135,21 +213,62 @@ class MyBar extends Component {
     }
 
     render() {
-    
-        return (
+      if(UserStore.loading){
+        return(
+            <div className="App">
+                <div className = 'container'>
+                  
+                  Loading, please wait...;
+                </div>
+            </div>
+      
+         ) }
+         else{
           
-          <div id="mybar_page">
-         
-          <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
-          <div class = "selectbox">
-          <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
-          </div>
-          <br></br>
-          <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
-        </div>
-        )
-
+          if(UserStore.isLoggedIn){
+            
+            return ( 
+              <div className = 'app'>
+                 <div className = 'container'>
+              
+              Welcome {UserStore.username}
+              <SubmitButton 
+                text = {'Log out'} 
+                disabled = {false} 
+                onClick = { () => this.doLogout() }/>
+        
+                </div>
+              </div>
+            )
+          }else{
+            return (
+              <div className="App">
+                    <div className = 'container'>
+                   
+                     <LoginForm/>
+                    </div>
+                </div>
+            )
+            
+          }
+         }
+       
+    /*
+      return(
+        
+         <div id="mybar_page">
+ 
+  <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
+  <div class = "selectbox">
+  <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
+  </div>
+  <br></br>
+  <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
+</div>
+)
+*/
     }
+    
 }
  
 export default MyBar

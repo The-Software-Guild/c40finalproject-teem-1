@@ -57,7 +57,7 @@ class DrinksTable extends Component {
             return []
         }
      
-        if ( !( drinkData.length > 0 ) ) { return [] }
+      
      
         return drinkData.map((object) => {
            var strAble = "False";
