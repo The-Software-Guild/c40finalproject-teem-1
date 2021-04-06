@@ -22,7 +22,6 @@ class Instructions extends Component {
 
     loadCocktail() {
         this.setState({ loading: true })
-        console.log("Loading contact data")
         fetch(`https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?i=${this.state.id}`)
         .then(data => data.json())
         .then(data => this.setState(

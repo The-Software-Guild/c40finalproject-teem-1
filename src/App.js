@@ -7,7 +7,7 @@ import All from "./pages/all"
 import HomePage from './pages/home'
 import MyBar from "./pages/mybar"
 import Instructions from "./pages/instructions"
-
+import UserStore from "./stores/UserStore"
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 class App extends React.Component{
   state = {

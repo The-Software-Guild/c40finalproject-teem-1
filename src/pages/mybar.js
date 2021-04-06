@@ -5,6 +5,9 @@ import { Switch, Route } from "react-router-dom"
 import DrinkTable from "../components/drinktable"
 import DrinkTable2 from "../components/drinktableV2"
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+import '../styles/mybar.css'
+import MyBarTable from "../components/myBarTable"
+
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 const ALL_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s="
 
@@ -19,6 +22,7 @@ class MyBar extends Component {
     state = {
       
         drinks: {
+         
         },
         ableToMake:[
 
@@ -28,11 +32,12 @@ class MyBar extends Component {
  
 
       }
+    
     componentDidMount() {
 
       this.loadDrinks()
       this.getIngredients();
-      
+     
     }
    
     loadDrinks(){
@@ -80,7 +85,7 @@ class MyBar extends Component {
      
        
         var canMake =[];
-        //loop through drink ingredients
+        
         
          this.state.ingredientList.map((ingredients, i) =>{ 
           var canAdd = true;
@@ -89,7 +94,7 @@ class MyBar extends Component {
           ingredients.map((item, x) =>{ 
                    
               if(!userIngredients.includes(item.toLowerCase())){
-                //console.log(i+"false:" + item);
+
                   canAdd = false;           
               }
             }
@@ -133,13 +138,14 @@ class MyBar extends Component {
     
         return (
           
-        <div>
-          <h1>Select which Ingredients you have at home!</h1>
+          <div id="mybar_page">
+         
+          <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
           <div class = "selectbox">
           <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
           </div>
           <br></br>
-          <DrinkTable2  drinkData = {this.state.ableToMake}></DrinkTable2>
+          <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
         </div>
         )
 
