@@ -242,7 +242,8 @@ class MyBar extends Component {
             return (
               <div className="App">
                     <div className = 'container'>
-                   <LoginForm/>  
+                   <LoginForm/>
+                   <AddUser/>  
                     </div>
                 </div>
             )
