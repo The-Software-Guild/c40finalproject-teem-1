@@ -76,7 +76,6 @@ async doLogin(){
                 value ={this.state.username ? this.state.username : ''}
                 onChange = { (val) => this.setInputValue('username', val)}/>
 
-
                 <InputField
                 type ='password'
                 placeholder = 'Password'
