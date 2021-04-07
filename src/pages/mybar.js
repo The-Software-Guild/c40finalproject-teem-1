@@ -17,6 +17,7 @@ import LoginForm from "../components/LoginForm"
 import InputField from "../components/InputField"
 import SubmitButton from "../components/SubmitButton"
 import {observer} from 'mobx-react'
+import AddUser from "../components/AddUser"
 
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 const ALL_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s="
@@ -42,10 +43,12 @@ class MyBar extends Component {
  
 
       }
-    
+    componentDidMount(){
+      this.loadDrinks();
+      this.getIngredients();
+    }
     async componentDidMount() {
-     this.loadDrinks();
-     this.getIngredients();
+     
         try{
           let res = await fetch('/isLoggedIn', {
             method: 'post',
@@ -153,7 +156,7 @@ class MyBar extends Component {
       
 
               });
-           console.log(this.state.ingredientList);
+         
       
       }
    
@@ -230,7 +233,9 @@ class MyBar extends Component {
             return ( 
               <div className = 'app'>
                  <div className = 'container'>
-              
+                
+ 
+            
               Welcome {UserStore.username}
               <SubmitButton 
                 text = {'Log out'} 
@@ -244,8 +249,9 @@ class MyBar extends Component {
             return (
               <div className="App">
                     <div className = 'container'>
-                   
-                     <LoginForm/>
+                   <LoginForm/>
+                 
+                     
                     </div>
                 </div>
             )
@@ -253,20 +259,18 @@ class MyBar extends Component {
           }
          }
        
-    /*
-      return(
-        
-         <div id="mybar_page">
- 
+    
+    
+return(
+  <div>
   <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
   <div class = "selectbox">
   <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
   </div>
   <br></br>
   <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
-</div>
+  </div>
 )
-*/
     }
     
 }

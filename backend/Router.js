@@ -4,6 +4,7 @@ class Router {
     constructor(app, db){
         this.login(app, db);
         this.logout(app, db);
+        this.add(app,db);
         this.isLoggedIn(app, db);
 
     }
@@ -57,9 +58,30 @@ class Router {
        
            });
 
-           
-           
         });
+    }
+    add(app, db){
+        app.post('/add', (req,res) => {
+            let username = req.body.username;
+            let password = req.body.password;
+            console.log(username);
+            username = username.toLowerCase();
+            const bcrypt = require('bcrypt');
+
+            let pswrd = bcrypt.hashSync(password, 9);
+            let cols = [username, pswrd];
+           db.query('INSERT INTO user(username, password) VALUES(?,?)', cols, (err, data, fields) => {
+            if(err){
+                res.json({
+                    success: false,
+                    msg: 'An error occured, please try again'
+                })
+                return;
+            }
+
+
+        })
+    })
     }
     logout(app, db){
        app.post('/logout', (req, res) => {
