@@ -14,6 +14,8 @@ class allPage extends Component {
         this.state = {
         //used to populate drinks table
         drinks: [],
+
+        //Used for drink search
         categories: [
             {
                 "category": "s",
@@ -31,8 +33,6 @@ class allPage extends Component {
                 "category": "g",
                 "name": "Glass Type"
             }],
-
-        //Used for drink search
         searchCategory: '',
         searchTerm: '',
         filteredDrinks: [],
@@ -43,8 +43,7 @@ class allPage extends Component {
       }
     }
     
-
-
+    //Propogate drinks table when user loads the page
     componentDidMount() {
         if (!this.props.match.params.element && (this.state.drinks === undefined || this.state.drinks.length == 0)) {
             this.loadAllDrinks()
@@ -91,12 +90,11 @@ class allPage extends Component {
         fetch("https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=")
           .then(data => data.json())
           .then(data => {
-           console.log(data.drinks)
             this.setState({drinks: data.drinks})
           })
     }
 
-    //For Autocomplete, get list of terms user can use to search for "category", "glass type", and "alcoholic"
+    //For Autocomplete, get list of search terms depending on the search category the user selected
     getAllSearchTerms = (event) => {
         let terms = []
 
@@ -104,10 +102,8 @@ class allPage extends Component {
             fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
                 .then(data => data.json())
                 .then(data => {
-                    console.log(data.drinks)
                     data.drinks.forEach(drink => {
                         terms = terms.concat(drink.strCategory)
-                        console.log(terms)
                     })
                     this.setState({ allTerms: terms})
 
@@ -118,10 +114,8 @@ class allPage extends Component {
             fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?g=list")
                 .then(data => data.json())
                 .then(data => {
-                    console.log(data.drinks)
                     data.drinks.forEach(drink => {
                         terms = terms.concat(drink.strGlass)
-                        console.log(terms)
                     })
                     this.setState({ allTerms: terms})
 
@@ -132,10 +126,8 @@ class allPage extends Component {
         fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?a=list")
             .then(data => data.json())
             .then(data => {
-                console.log(data.drinks)
                 data.drinks.forEach(drink => {
                     terms = terms.concat(drink.strAlcoholic)
-                    console.log(terms)
                 })
                 this.setState({ allTerms: terms})
 
@@ -143,11 +135,10 @@ class allPage extends Component {
         } 
     }
     
-    //For Autocomplete
+    //For Autocomplete, create suggestions based on user input changes
     onTextChange = (event) => {
         const value = event.target.value
         let suggestions = [];
-        console.log(this.state.allTerms)
         if (value.length > 0) {
             const regex = new RegExp(`^${value}`, 'i');
             suggestions = this.state.allTerms.sort().filter(v => regex.test(v));
@@ -155,7 +146,7 @@ class allPage extends Component {
         this.setState(() => ({ suggestions, searchTerm: value }))  
     } 
 
-    //For Autocomplete
+    //For Autocomplete, set input to the suggestion the user clicks
     suggestedSelected = (search) => {
         this.setState(() => ({
             searchTerm: search,
@@ -166,9 +157,7 @@ class allPage extends Component {
 
     //For changing category on searches
     changeCategory = (event) => {
-        console.log(`Current search Category: ${this.state.searchCategory}`)
         let value = event.currentTarget.value;
-        console.log(`value: ` + value)
         this.setState( prevState => { return { searchCategory:  value }}, () => {
             this.getAllSearchTerms()
         });
@@ -182,7 +171,6 @@ class allPage extends Component {
             fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + this.state.searchTerm)
             .then(data => data.json())
             .then(data => {
-             console.log(data.drinks)
               this.setState({drinks: data.drinks})
             }) 
         }
@@ -192,11 +180,8 @@ class allPage extends Component {
                 .then(this.handleErrors)
                 .then(data => data.json())
                 .then(data => {
-                    console.log(data.drinks)
                     this.setState({ filteredDrinks: data.drinks, drinks: [] }, () => {
-                        console.log(`${this.state.filteredDrinks}`);
                         this.state.filteredDrinks.forEach(drink => {
-                            console.log('drink : ' + drink.strDrink)
                             fetch("https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + drink.idDrink)
                                 .then(data => data.json())
                                 .then(data => {
