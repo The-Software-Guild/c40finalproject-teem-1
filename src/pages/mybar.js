@@ -30,11 +30,12 @@ var options = [
 
 
 class MyBar extends Component {
+  
     state = {
       
-        drinks: {
+        drinks: []
          
-        },
+        ,
         ableToMake:[
 
         ],
@@ -43,12 +44,10 @@ class MyBar extends Component {
  
 
       }
-    componentDidMount(){
+
+    async componentDidMount() {
       this.loadDrinks();
       this.getIngredients();
-    }
-    async componentDidMount() {
-     
         try{
           let res = await fetch('/isLoggedIn', {
             method: 'post',
@@ -107,26 +106,15 @@ class MyBar extends Component {
         }
     
       }
-      state = {
-       ingredient: "",
-        drinkData: [
-          {
-            "Id": 1,
-            "Name": "Product",
-           
-         
-          }]
-        
-       
-      }
+     
       
 
-    loadDrinks(){
+      loadDrinks(){
    
         fetch(ALL_PATH)
           .then(data => data.json())
           .then(data => {
-          
+       
             this.setState({drinks: data.drinks});
             data.drinks.map((drink, i) => {
               var ingredients = [
@@ -156,11 +144,10 @@ class MyBar extends Component {
       
 
               });
-         
+           
       
       }
-   
-      getDrinksByIngredients= (event) =>{
+      getDrinksByIngredients = (event) =>{
        
         let userIngredients = event.map(a => a.value.toLowerCase());
      
@@ -210,12 +197,13 @@ class MyBar extends Component {
             options.push( { label: ingredient.strIngredient1, value: ingredient.strIngredient1})                          
         });
 
-          this.setState({ingredient: data})
+        
         })
          
     }
 
     render() {
+     
       if(UserStore.loading){
         return(
             <div className="App">
@@ -227,31 +215,34 @@ class MyBar extends Component {
       
          ) }
          else{
-          
+         
+            
           if(UserStore.isLoggedIn){
             
             return ( 
-              <div className = 'app'>
-                 <div className = 'container'>
-                
- 
-            
-              Welcome {UserStore.username}
-              <SubmitButton 
+              <div >
+                <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
+                <div class = "selectbox">
+                <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
+                </div>
+                <br></br>
+                <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
+              
+
+                Welcome {UserStore.username}
+                <SubmitButton 
                 text = {'Log out'} 
                 disabled = {false} 
                 onClick = { () => this.doLogout() }/>
-        
-                </div>
               </div>
+          
+             
             )
           }else{
             return (
               <div className="App">
                     <div className = 'container'>
-                   <LoginForm/>
-                 
-                     
+                   <LoginForm/>  
                     </div>
                 </div>
             )
@@ -260,17 +251,7 @@ class MyBar extends Component {
          }
        
     
-    
-return(
-  <div>
-  <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
-  <div class = "selectbox">
-  <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
-  </div>
-  <br></br>
-  <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
-  </div>
-)
+
     }
     
 }
