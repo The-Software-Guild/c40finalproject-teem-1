@@ -41,8 +41,6 @@ class allPage extends Component {
         searchCategory: '',
         searchTerm: '',
         filteredDrinks: [],
-        
-        location: React.PropTypes,
 
         //for Autocomplete
         allTerms: [],
@@ -65,17 +63,16 @@ class allPage extends Component {
 
     loadDrinksFromURL = () => {
         let element = this.props.match.params.element
-                if(element){
-                    element = element.replace(/%20/g, " ");
-                }
-                // if(this.props.match.params){
-                this.setState({
-                    searchTerm: this.props.match.params.element,
-                    searchCategory: this.props.match.params.category
-        
-                }, () => {
-                    this.getDrinks();
-                })
+        if(element){
+            element = element.replace(/%20/g, " ");
+        }
+        this.setState({
+            searchTerm: this.props.match.params.element,
+            searchCategory: this.props.match.params.category
+
+        }, () => {
+            this.getDrinks();
+        })
     }
     
     componentDidUpdate(prevProps) {
@@ -92,7 +89,6 @@ class allPage extends Component {
             }else{
                 this.loadDrinksFromURL();
             }
-            this.setState({location: prevProps.location.pathname});
         }
     }
 

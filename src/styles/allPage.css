@@ -1,13 +1,12 @@
 #all_page {
     margin: 0 2%;
-  }
+}
   
-  #all_page_title {
+#all_page_title {
     padding-top: 2%;
     padding-bottom: 2%;
-  }
+}
 
-  .drinkSearch {
-    justify-content: center;
-    align-items: center;
-  }
+Button {
+    height: 35px;
+}
