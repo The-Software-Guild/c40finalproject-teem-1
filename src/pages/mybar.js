@@ -32,11 +32,14 @@ var options = [
 class MyBar extends Component {
   
     state = {
-      
+        showLogin: true,
         drinks: []
          
         ,
         ableToMake:[
+
+        ],
+        ingredients:[
 
         ],
         ingredientList:[
@@ -147,11 +150,39 @@ class MyBar extends Component {
            
       
       }
+   async storeUserIngredients(i){
+  
+
+          try{
+              let res = await fetch('/store', {
+                  method: 'post',
+                  headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      username: UserStore.username,
+                      uingredients: i
+                 
+                  })
+                  
+          });
+          
+          let result = await res.json();
+          
+          }catch(e){
+              console.log(e);
+             
+          }
+      
+      
+  
+     }
       getDrinksByIngredients = (event) =>{
        
         let userIngredients = event.map(a => a.value.toLowerCase());
-     
-       
+        this.storeUserIngredients(userIngredients);
+        
         var canMake =[];
         
         
@@ -176,6 +207,8 @@ class MyBar extends Component {
              
           }
         });
+     
+       
        
          
 
@@ -194,10 +227,12 @@ class MyBar extends Component {
         .then(data => {
            
           data.drinks.map((ingredient, i) => {
-            options.push( { label: ingredient.strIngredient1, value: ingredient.strIngredient1})                          
+            options.push( { label: ingredient.strIngredient1, value: ingredient.strIngredient1});
+           // this.state.ingredients.push(ingredient.strIngredient1);                          
         });
-
         
+        
+       //this.storeUserIngredients(this.state.ingredients);
         })
          
     }
@@ -250,9 +285,6 @@ class MyBar extends Component {
             
           }
          }
-       
-    
-
     }
     
 }
