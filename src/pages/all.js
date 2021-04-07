@@ -10,12 +10,7 @@ import '../styles/allPage.css'
 class allPage extends Component {
     constructor(props) {
         super(props);
-        //allSearchTerms = for testing autocomplete
-        this.allSearchTerms =[
-            'Margarita',
-            'Shot glass',
-            'Non Alcoholic'
-        ];
+
         this.state = {
         //used to populate drinks table
         drinks: [],
@@ -51,10 +46,8 @@ class allPage extends Component {
 
 
     componentDidMount() {
-
         if (!this.props.match.params.element && (this.state.drinks === undefined || this.state.drinks.length == 0)) {
             this.loadAllDrinks()
-            this.getAllSearchTerms()
         }
         else {
             this.loadDrinksFromURL();
@@ -106,30 +99,36 @@ class allPage extends Component {
     //For Autocomplete, get list of terms user can use to search for "category", "glass type", and "alcoholic"
     getAllSearchTerms = (event) => {
         let terms = []
-        fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
-            .then(data => data.json())
-            .then(data => {
-                console.log(data.drinks)
-                data.drinks.forEach(drink => {
-                    terms = terms.concat(drink.strCategory)
-                    console.log(terms)
-                })
-                this.setState({ allTerms: terms})
 
-            }) 
+        if (this.state.searchCategory === 'c') {
+            fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
+                .then(data => data.json())
+                .then(data => {
+                    console.log(data.drinks)
+                    data.drinks.forEach(drink => {
+                        terms = terms.concat(drink.strCategory)
+                        console.log(terms)
+                    })
+                    this.setState({ allTerms: terms})
 
-        fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?g=list")
-            .then(data => data.json())
-            .then(data => {
-                console.log(data.drinks)
-                data.drinks.forEach(drink => {
-                    terms = terms.concat(drink.strGlass)
-                    console.log(terms)
-                })
-                this.setState({ allTerms: terms})
+                }) 
+        }
 
-            }) 
+        else if (this.state.searchCategory === 'g') {
+            fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?g=list")
+                .then(data => data.json())
+                .then(data => {
+                    console.log(data.drinks)
+                    data.drinks.forEach(drink => {
+                        terms = terms.concat(drink.strGlass)
+                        console.log(terms)
+                    })
+                    this.setState({ allTerms: terms})
 
+                }) 
+        }
+
+        else if (this.state.searchCategory === 'a') {
         fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?a=list")
             .then(data => data.json())
             .then(data => {
@@ -141,8 +140,7 @@ class allPage extends Component {
                 this.setState({ allTerms: terms})
 
             }) 
-        
-        
+        } 
     }
     
     //For Autocomplete
@@ -171,9 +169,9 @@ class allPage extends Component {
         console.log(`Current search Category: ${this.state.searchCategory}`)
         let value = event.currentTarget.value;
         console.log(`value: ` + value)
-
-        this.setState( prevState => { return { searchCategory:  value }}       
-        );
+        this.setState( prevState => { return { searchCategory:  value }}, () => {
+            this.getAllSearchTerms()
+        });
     }
 
     //For retrieving drinks from API based on search category and input from user
@@ -189,24 +187,30 @@ class allPage extends Component {
             }) 
         }
         else {
-            fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?" + this.state.searchCategory + "=" + this.state.searchTerm)
-            .then(data => data.json())
-            .then(data => {
-                console.log(data.drinks)
-                this.setState({ filteredDrinks: data.drinks, drinks: [] }, () => {
-                    console.log(`${this.state.filteredDrinks}`);
-                    this.state.filteredDrinks.forEach(drink => {
-                        console.log('drink : ' + drink.strDrink)
-                        fetch("https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + drink.idDrink)
-                            .then(data => data.json())
-                            .then(data => {
-                                this.setState({
-                                    drinks: this.state.drinks.concat(data.drinks)
-                                    })
-                            }) 
-                    })
-                });
-            })  
+            if (this.state.allTerms.includes(this.state.searchTerm)) {
+                fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?" + this.state.searchCategory + "=" + this.state.searchTerm)
+                .then(this.handleErrors)
+                .then(data => data.json())
+                .then(data => {
+                    console.log(data.drinks)
+                    this.setState({ filteredDrinks: data.drinks, drinks: [] }, () => {
+                        console.log(`${this.state.filteredDrinks}`);
+                        this.state.filteredDrinks.forEach(drink => {
+                            console.log('drink : ' + drink.strDrink)
+                            fetch("https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + drink.idDrink)
+                                .then(data => data.json())
+                                .then(data => {
+                                    this.setState({
+                                        drinks: this.state.drinks.concat(data.drinks)
+                                        })
+                                }) 
+                        })
+                    });
+                })  
+            }
+            else {
+                this.setState({ drinks: [] })
+            }
         }
     }
 
