@@ -210,32 +210,34 @@ class allPage extends Component {
 
                 <div id="all_page">
                     <h1 id="all_page_title">Available Drinks</h1>
-                    <Col md={{ span: 6, offset: 3 }}>
-                        <Row className="drinkSearch">
-                            <Col>
-                                <select className="form-select form-control mr-2" value={this.state.searchCategory} onChange={this.changeCategory} >
-                                    <option value="" key="-1" disabled >Select Category...</option>
-                                    {this.state.categories.map((category, index) => {
-                                        if(category){
-                                            return <option key={index} value={category.category}>{category.name}</option>
-                                        }
-                                    })}
-                                </select>
-                            </Col>
-                            <Col>
-                                <Autocomplete 
-                                    inputChange={this.onTextChange}
-                                    suggestions={suggestions}
-                                    suggestedSelected={this.suggestedSelected}
-                                    searchTerm={searchTerm}
-                                />
-                            </Col>
-                            <Button id="drinkSearchButton" size="sm" onClick={this.getDrinks}>Search Drinks</Button>
-                        </Row>
-                    </Col>
+                    <Row>
+                        <Button variant="info" id="allDrinksButton" size="sm" onClick={this.loadAllDrinks}>See All Drinks</Button>
+                        <Col md={{ span: 7, offset: 1 }}>
+                            <Row className="drinkSearch">
+                                <Col>
+                                    <select className="form-select form-control mr-2" value={this.state.searchCategory} onChange={this.changeCategory} >
+                                        <option value="" key="-1" disabled >Select Category...</option>
+                                        {this.state.categories.map((category, index) => {
+                                            if(category){
+                                                return <option key={index} value={category.category}>{category.name}</option>
+                                            }
+                                        })}
+                                    </select>
+                                </Col>
+                                <Col>
+                                    <Autocomplete 
+                                        inputChange={this.onTextChange}
+                                        suggestions={suggestions}
+                                        suggestedSelected={this.suggestedSelected}
+                                        searchTerm={searchTerm}
+                                    />
+                                </Col>
+                                <Button variant="success" id="drinkSearchButton" size="sm" onClick={this.getDrinks}>Search Drinks</Button>
+                            </Row>
+                        </Col>
+                    </Row>
 
                     <DrinkTable drinkData = {drinks}></DrinkTable>
-                    <Button id="searchDrinkButton"variant="Secondary" onClick={this.loadAllDrinks}>See All Drinks</Button>
                 </div>
             </div>
 

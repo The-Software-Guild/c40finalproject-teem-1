@@ -9,4 +9,9 @@
 
 Button {
     height: 35px;
+    text-align: center;
+}
+
+.drinkSearch {
+    justify-content: center;
 }

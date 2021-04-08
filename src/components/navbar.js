@@ -72,7 +72,7 @@ class NavBar extends Component {
                             <Link className="nav-link" to='/mybar'>MyBar</Link>
                             </li>
                             <li className="nav-item pl-3">
-                                <Link className="nav-link" to='/all'>All</Link>
+                                <Link className="nav-link" to='/all'>All Drinks</Link>
                             </li>
                         </ul>
                         <form className="d-flex ml-auto">
