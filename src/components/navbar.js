@@ -84,7 +84,7 @@ class NavBar extends Component {
                                 }
                             })}
                         </select>
-                        <div className="input-group rounded">
+                        <div className="input-group rounded align-items-center">
                             <input type="search" className="form-control rounded" value={this.state.elementSearched} onChange={this.handleSearch} placeholder="Search" aria-label="Search"
                                 aria-describedby="search-addon" disabled={this.state.selectedCategory === ""}/>
                             <button className="input-group-text border-0" onClick={this.redirect} id="search-addon" disabled={this.state.elementSearched === "" || this.state.selectedCategory === ""}>
