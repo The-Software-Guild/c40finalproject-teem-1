@@ -1,0 +1,13 @@
+#mybar_page {
+    margin: 0 2%;
+  }
+  
+  #mybar_page_title {
+    padding-top: 2%;
+    padding-bottom: 2%;
+  }
+.formChangeBtn {
+  position: flex;
+  justify-content: center;
+  align-items: center;
+}
