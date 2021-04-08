@@ -30,15 +30,11 @@ class HomePage extends React.Component {
             <div id="homePage">
                     <h1 style={{fontWeight: 'Bold'}}>Welcome!</h1>
                     <hr className="thick"/>  
-                        <p style={{fontWeight: 'Bold'}}>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
-                            totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae 
-                            dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-                            sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est,
-                            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora
-                            incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum 
-                            exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
-                            vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui
-                            dolorem eum fugiat quo voluptas nulla pariatur?
+                        <p style={{fontWeight: 'Bold'}}>
+                            Welcome to Team 1's Drinkology Web App!
+                            Try out a new drink recipe below or find new recipes on your own.
+                            Discover all of the drinks you can create by visiting the <a href="/mybar">MyBar</a> page! Simply login, select your ingredients, then get to drinking!
+                            Or explore all of the available drink recipes in the <a href="/all">All Drinks</a> page.
                         </p>
                         <h2 style={{marginTop: '2em', fontWeight: 'Bold'}}>Try Something New!</h2>
                         <div className="card mb-3">
