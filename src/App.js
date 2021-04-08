@@ -44,6 +44,7 @@ class App extends React.Component{
                         <Route path='/mybar' component={MyBar} />
                         <Route path='/all' component={All} />
                         <Route path='/instructions/:id' component={Instructions} />
+                        <Route path='/find/:category/:element' component={All} />
                     </Switch>
                 </main>
             </div>
