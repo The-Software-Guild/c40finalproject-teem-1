@@ -79,9 +79,7 @@ class NavBar extends Component {
                         <select className="form-select form-control mr-2" value={this.state.selectedCategory} onChange={this.handleCategory} >
                         <option value="" key="-1" disabled >Select Category...</option>
                             {this.state.categories.map((category, index) => {
-                                if(category){
-                                    return <option key={index} value={category.category}>{category.name}</option>
-                                }
+                                return <option key={index} value={category.category}>{category.name}</option>
                             })}
                         </select>
                         <div className="input-group rounded align-items-center">
