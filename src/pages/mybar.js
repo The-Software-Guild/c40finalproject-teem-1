@@ -18,6 +18,7 @@ import InputField from "../components/InputField"
 import SubmitButton from "../components/SubmitButton"
 import {observer} from 'mobx-react'
 import AddUser from "../components/AddUser"
+import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 const ALL_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s="
@@ -31,7 +32,7 @@ var options = [
 
 class MyBar extends Component {
     state = {
-      
+        isNewUser: false,
         drinks: {
          
         },
@@ -115,7 +116,8 @@ class MyBar extends Component {
             "Name": "Product",
            
          
-          }]
+          }],
+        isNewUser: false
         
        
       }
@@ -215,6 +217,14 @@ class MyBar extends Component {
          
     }
 
+    changeLogin() {
+      if (this.isLoggedIn) {
+        this.setState({isLoggedIn: false});
+      } else {
+        this.setState({isLoggedIn: true});
+      }
+    }
+
     render() {
       if(UserStore.loading){
         return(
@@ -246,20 +256,26 @@ class MyBar extends Component {
               </div>
             )
           }else{
+            console.log(this.state.isNewUser);
             return (
               <div className="App">
-                    <div className = 'container'>
-                   <LoginForm/>
-                 
-                     
-                    </div>
+
+                      <Row>
+                        {(!this.state.isNewUser) ? <LoginForm /> : <AddUser />}
+                      </Row>
+                      <Row>
+                        <Col>
+                        <Button className="formChangeBtn" onClick = { () => this.setState(({isNewUser}) => ({isNewUser: !isNewUser}))}>
+                        {(!this.state.isNewUser) ? "New User?" : "Already have an account?"}
+                        </Button>
+                        </Col>
+                      </Row>
+
                 </div>
             )
             
           }
          }
-       
-    
     
 return(
   <div>

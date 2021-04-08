@@ -1,7 +1,8 @@
 import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
-import UserStore from '../stores/UserStore'
+import UserStore from '../stores/UserStore';
+import { Form, Button } from 'react-bootstrap';
 class AddUser extends React.Component {
 constructor(props){
     super(props);
@@ -72,6 +73,36 @@ async add(){
 
     render() {
         return (
+            /*            
+            <Form className="loginForm">
+                <Form.Group controlId="formUsername">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" placeholder="Enter Username"
+                    value ={this.state.username ? this.state.username : ''}
+                    onChange = { (val) => this.setInputValue('password', val)}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="formPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Enter Password"
+                    value ={this.state.password ? this.state.password : ''}
+                    onChange = { (val) => this.setInputValue('password', val)}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="formConfirmPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control type="password" placeholder="Confirm Password"
+                        value ={this.state.cpassword ? this.state.cpassword : ''}
+                        onChange = { (val) => this.setInputValue('cpassword', val)}>
+                    </Form.Control>
+                </Form.Group>
+                <Button variant="primary" type="submit"
+                disabled = {this.state.buttonDisabled}
+                onClick = {() => this.add()}>
+                    Sign Up
+                </Button>
+            </Form>
+            */
             <div className = "loginForm">
                 Log in
                 <InputField
@@ -97,6 +128,7 @@ async add(){
                 disabled = {this.state.buttonDisabled}
                 onClick = {() => this.add()}/>
             </div>
+            
         );
     }
 }
