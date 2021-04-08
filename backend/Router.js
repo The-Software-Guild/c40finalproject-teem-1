@@ -6,8 +6,10 @@ class Router {
         this.logout(app, db);
         this.add(app,db);
         this.isLoggedIn(app, db);
+        this.store(app, db);
 
     }
+
     login(app, db){
         app.post('/login', (req, res) => {
            let username = req.body.username;
@@ -60,6 +62,32 @@ class Router {
 
         });
     }
+    store(app, db){
+        app.post('/store', (req,res) => {
+            let userid = req.session.userID;
+            let ingredients = req.body.uingredients;
+           
+           
+          
+            ingredients.forEach(element => {
+                let cols = [userid, element];
+                db.query('insert ignore into user_ingredient(id_ingredient, id_User) select ingredient.id, user.id from ingredient, user where user.id = ? and ingredient.strName like ?;', cols, (err, data, fields) => {
+                    if(err){
+                        console.log(err);
+                        res.json({
+                            success: false,
+                            msg: 'An error occured, please try again'
+                        })
+                        return;
+                    }
+                   
+                });
+            });
+            
+            
+        })
+ 
+}
     add(app, db){
         app.post('/add', (req,res) => {
             let username = req.body.username;

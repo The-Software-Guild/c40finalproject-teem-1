@@ -15,9 +15,9 @@ class DrinksTable extends Component {
     
     render() {
         let { ableData } = this.props;
-        console.log(ableData);
+       
         let { drinkData } = this.props;
-
+      
         const data = {
             columns: this.getColumns(),
             rows: this.getRows(drinkData, ableData)
