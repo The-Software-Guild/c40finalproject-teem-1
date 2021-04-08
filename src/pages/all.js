@@ -213,7 +213,7 @@ class allPage extends Component {
                     <Row>
                         <Button variant="info" id="allDrinksButton" size="sm" onClick={this.loadAllDrinks}>See All Drinks</Button>
                         <Col md={{ span: 7, offset: 1 }}>
-                            <Row className="drinkSearch">
+                            <Row className="drinkSearch align-items-center">
                                 <Col>
                                     <select className="form-select form-control mr-2" value={this.state.searchCategory} onChange={this.changeCategory} >
                                         <option value="" key="-1" disabled >Select Category...</option>
