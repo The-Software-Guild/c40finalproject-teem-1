@@ -26,7 +26,7 @@ class NavBar extends Component {
                     "category": "g",
                     "name": "Glass Type"
                 }],
-            selectedCategory: "s",
+            selectedCategory: "",
             elementSearched: ""
         }
     }
@@ -42,6 +42,17 @@ class NavBar extends Component {
     handleCategory = (event) => {
         console.log(event.target.value);
         this.setState({selectedCategory: event.target.value})
+    }
+
+    redirect = (event) => {
+        let element = this.state.elementSearched;
+        let category = this.state.selectedCategory;
+        this.setState(
+            {
+                elementSearched: "",
+                selectedCategory: ""
+        });
+        this.props.history.push('/find/' + category + "/" + element)
     }
 
     render () {
@@ -65,7 +76,8 @@ class NavBar extends Component {
                             </li>
                         </ul>
                         <form className="d-flex ml-auto">
-                        <select className="form-select form-control mr-2" onChange={this.handleCategory} >
+                        <select className="form-select form-control mr-2" value={this.state.selectedCategory} onChange={this.handleCategory} >
+                        <option value="" key="-1" disabled >Select Category...</option>
                             {this.state.categories.map((category, index) => {
                                 if(category){
                                     return <option key={index} value={category.category}>{category.name}</option>
@@ -73,10 +85,10 @@ class NavBar extends Component {
                             })}
                         </select>
                         <div className="input-group rounded">
-                            <input type="search" className="form-control rounded" onChange={this.handleSearch} placeholder="Search" aria-label="Search"
+                            <input type="search" className="form-control rounded" value={this.state.elementSearched} onChange={this.handleSearch} placeholder="Search" aria-label="Search"
                                 aria-describedby="search-addon" disabled={this.state.selectedCategory === ""}/>
-                            <button className="input-group-text border-0" id="search-addon" disabled={this.state.elementSearched === ""}>
-                                <Link to={'/find/' + this.state.selectedCategory + "/" + this.state.elementSearched} ><i className="fas fa-search"></i></Link>
+                            <button className="input-group-text border-0" onClick={this.redirect} id="search-addon" disabled={this.state.elementSearched === "" || this.state.selectedCategory === ""}>
+                                <i className="fas fa-search"></i>
                             </button>
                         </div>
                         </form>

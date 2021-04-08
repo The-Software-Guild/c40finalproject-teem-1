@@ -60,7 +60,8 @@ class allPage extends Component {
         }
         this.setState({
             searchTerm: this.props.match.params.element,
-            searchCategory: this.props.match.params.category
+            searchCategory: this.props.match.params.category,
+            allTerms: [this.props.match.params.element]
 
         }, () => {
             this.getDrinks();
