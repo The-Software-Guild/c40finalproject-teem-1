@@ -19,11 +19,12 @@
     max-width: 40%;
     min-width: 50%;
     margin-top: 1.25em;
-    background-color: rgba(0, 0, 0, 0.575) !important;
+   
 }
 .special-card {
     color: white;
     border-style: solid !important;
     border-color: white !important;
     border-radius: 10px !important;
+    background-color: rgba(0, 0, 0, 0.575) !important;
 }
