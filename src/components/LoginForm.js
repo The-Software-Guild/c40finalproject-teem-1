@@ -1,7 +1,9 @@
 import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
-import UserStore from '../stores/UserStore'
+import UserStore from '../stores/UserStore';
+import '../styles/login.css';
+import { Form, Button } from 'react-bootstrap';
 class LoginForm extends React.Component {
 constructor(props){
     super(props);
@@ -68,6 +70,31 @@ async doLogin(){
 }
     render() {
         return (
+            /*
+            <Form className="loginForm">
+                <Form.Group>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" placeholder="Username"
+                    value={this.state.username ? this.state.username : ''}
+                    onChange = { (val) => this.setInputValue('username', val)}
+                    required>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password"
+                    value ={this.state.password ? this.state.password : ''}
+                    onChange = { (val) => this.setInputValue('password', val)}
+                    required>
+                    </Form.Control>
+                </Form.Group>
+                <Button type="submit"
+                disabled = {this.state.buttonDisabled}
+                onClick = {() => this.doLogin()}>
+                    Log In
+                </Button>
+            </Form>
+            */
             <div className = "loginForm">
                 Log in
                 <InputField

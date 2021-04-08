@@ -6,3 +6,8 @@
     padding-top: 2%;
     padding-bottom: 2%;
   }
+.formChangeBtn {
+  position: flex;
+  justify-content: center;
+  align-items: center;
+}
