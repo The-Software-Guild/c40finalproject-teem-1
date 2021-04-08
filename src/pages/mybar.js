@@ -18,6 +18,7 @@ import InputField from "../components/InputField"
 import SubmitButton from "../components/SubmitButton"
 import {observer} from 'mobx-react'
 import AddUser from "../components/AddUser"
+import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const INGREDIENT_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"
 const ALL_PATH = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s="
@@ -39,9 +40,7 @@ class MyBar extends Component {
         ableToMake:[
 
         ],
-        ingredients:[
-
-        ],
+        useringredients:[],
         ingredientList:[
         ]
  
@@ -51,6 +50,9 @@ class MyBar extends Component {
     async componentDidMount() {
       this.loadDrinks();
       this.getIngredients();
+     // this.getDrinksByIngredients();
+      console.log(this.state.ingredientList);
+      console.log(this.state.useringredients);
         try{
           let res = await fetch('/isLoggedIn', {
             method: 'post',
@@ -111,9 +113,10 @@ class MyBar extends Component {
       }
      
       
+//inits both drink and ingredient lists
 
       loadDrinks(){
-   
+        console.log("loaddrinks");
         fetch(ALL_PATH)
           .then(data => data.json())
           .then(data => {
@@ -140,16 +143,30 @@ class MyBar extends Component {
               var filtered = ingredients.filter(function (el) {
                 return el != null;
               });
-              this.state.ingredientList.push(filtered);
+             filtered.map((x, i) =>{
+                filtered[i] = x.toLowerCase();
+             });
+              
+              this.state.ingredientList.push(filtered);   
+
+              
            
                         
             });
+           
+            this.setState({
+             ingredientList: this.state.ingredientList
+          }, () => {
+              this.getIngredientsFromDB()
+          })
+       
       
 
               });
            
       
       }
+      //stores ingredients passed in into the DB
    async storeUserIngredients(i){
   
 
@@ -178,48 +195,83 @@ class MyBar extends Component {
       
   
      }
-      getDrinksByIngredients = (event) =>{
-       
-        let userIngredients = event.map(a => a.value.toLowerCase());
-        this.storeUserIngredients(userIngredients);
-        
-        var canMake =[];
-        
-        
-         this.state.ingredientList.map((ingredients, i) =>{ 
-          var canAdd = true;
-         
-           
-          ingredients.map((item, x) =>{ 
-                   
-              if(!userIngredients.includes(item.toLowerCase())){
-
-                  canAdd = false;           
-              }
-            }
-          
-          );
-         
-  
-          if(canAdd == true && !(this.state.ableToMake.includes(this.state.drinks[i]))){
-             
-              canMake.push(this.state.drinks[i]);
-             
-          }
-        });
      
-       
-       
-         
-
-      if(canMake.length != 0 ){
+     getDrinksByIngredients(){
+      console.log("getdrinks by ing");
+   
+      var canMake =[];
      
-      this.setState({
-        ableToMake: this.state.ableToMake.concat(canMake)})
-     
-      }
-    }
+      this.state.ingredientList.map((ingredients, i) =>{ 
+       var canAdd = true;
       
+     
+       ingredients.map((item, x) =>{ 
+       
+           if(!this.state.useringredients.includes(item.toLowerCase())){
+
+               canAdd = false;           
+           }
+           
+         }
+       
+       );
+      
+
+       if(canAdd == true && !(this.state.ableToMake.includes(this.state.drinks[i]))){
+          
+           canMake.push(this.state.drinks[i]);
+          
+       }
+     });
+  
+    
+    
+      
+
+   if(canMake.length != 0 ){
+  
+   this.setState({
+     ableToMake: this.state.ableToMake.concat(canMake)})
+  
+   }
+     }
+  selectFunction = (event) =>{
+       console.log("select");
+        let newIngredients = event.map(a => a.value.toLowerCase());
+        this.storeUserIngredients(newIngredients);
+        this.loadDrinks();
+       
+    }
+  async getIngredientsFromDB(){
+    console.log("DB");
+      try{
+        let res = await fetch('/getingredients', {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+           
+            
+      });
+      
+      
+      let result = await res.json();
+     result.map((x, i) =>{ 
+        this.state.useringredients.push(x.strName.toLowerCase());
+     });
+  
+     this.setState({useringredients: this.state.useringredients}, () => this.getDrinksByIngredients());
+     
+    
+    
+      }catch(e){
+        console.log(e);
+       
+      }
+  }
+
+
     getIngredients(){
    
       fetch(INGREDIENT_PATH)
@@ -228,13 +280,21 @@ class MyBar extends Component {
            
           data.drinks.map((ingredient, i) => {
             options.push( { label: ingredient.strIngredient1, value: ingredient.strIngredient1});
-           // this.state.ingredients.push(ingredient.strIngredient1);                          
+                            
         });
         
         
-       //this.storeUserIngredients(this.state.ingredients);
+      
         })
          
+    }
+
+    changeLogin() {
+      if (this.isLoggedIn) {
+        this.setState({isLoggedIn: false});
+      } else {
+        this.setState({isLoggedIn: true});
+      }
     }
 
     render() {
@@ -258,7 +318,7 @@ class MyBar extends Component {
               <div >
                 <h1 id="mybar_page_title">Select which Ingredients you have at home!</h1>
                 <div class = "selectbox">
-                <ReactMultiSelectCheckboxes options={options} onChange ={this.getDrinksByIngredients}></ReactMultiSelectCheckboxes>
+                <ReactMultiSelectCheckboxes options={options} onChange ={this.selectFunction}></ReactMultiSelectCheckboxes>
                 </div>
                 <br></br>
                 <MyBarTable drinkData = {this.state.drinks} ableData ={this.state.ableToMake}></MyBarTable>
@@ -274,12 +334,21 @@ class MyBar extends Component {
              
             )
           }else{
+            console.log(this.state.isNewUser);
             return (
               <div className="App">
-                    <div className = 'container'>
-                   <LoginForm/>
-                   <AddUser/>  
-                    </div>
+
+                      <Row>
+                        {(!this.state.isNewUser) ? <LoginForm /> : <AddUser />}
+                      </Row>
+                      <Row>
+                        <Col>
+                        <Button className="formChangeBtn" onClick = { () => this.setState(({isNewUser}) => ({isNewUser: !isNewUser}))}>
+                        {(!this.state.isNewUser) ? "New User?" : "Already have an account?"}
+                        </Button>
+                        </Col>
+                      </Row>
+
                 </div>
             )
             

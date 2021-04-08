@@ -7,9 +7,10 @@ class Router {
         this.add(app,db);
         this.isLoggedIn(app, db);
         this.store(app, db);
+        this.getUserIngredients(app, db);
 
     }
-
+    
     login(app, db){
         app.post('/login', (req, res) => {
            let username = req.body.username;
@@ -61,6 +62,25 @@ class Router {
            });
 
         });
+    }
+    
+    getUserIngredients(app, db){
+        app.get('/getingredients', (req, res) => {
+            let cols = [req.session.userID]
+            db.query('SELECT i.strName FROM User u INNER JOIN User_Ingredient ui ON u.id = ui.id_user INNER JOIN Ingredient i ON i.id = ui.id_ingredient WHERE u.id = ?;', cols, (err, data, fields) => {
+               
+                res.send(data);
+                if(err){
+                    res.json({
+                        success: false,
+                        msg: 'An error occured, please try again'
+                    })
+                    return;
+                }
+            })
+               
+            });
+        
     }
     store(app, db){
         app.post('/store', (req,res) => {
