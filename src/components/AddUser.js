@@ -39,6 +39,44 @@ resetForm(){
 
     })
 }
+async doLogin(){
+    if(!this.state.username){
+        return;
+    }
+    if(!this.state.password){
+        return;
+    }
+    this.setState({
+        buttonDisabled: true
+    })
+    try{
+        let res = await fetch('/login', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password
+            })
+       });
+       let result = await res.json();
+       if(result && result.success){
+           UserStore.isLoggedIn = true;
+           UserStore.username = result.username;
+
+       }
+       else if(result && result.success === false){
+           this.resetForm();
+           alert(result.msg);
+       }
+    }catch(e){
+        console.log(e);
+        this.resetForm();
+    }
+    
+}
 async add(){
 
     if(this.checkPassword() === true){
@@ -68,6 +106,8 @@ async add(){
             this.resetForm();
         }
     }
+   
+
     
 }
 
@@ -104,7 +144,7 @@ async add(){
             </Form>
             */
             <div className = "loginForm">
-                Log in
+                Add User
                 <InputField
                 type ='text'
                 placeholder = 'Username'
@@ -124,7 +164,7 @@ async add(){
                 onChange = { (val) => this.setInputValue('cpassword', val)}/>
 
                 <SubmitButton
-                text='Login'
+                text='Add User'
                 disabled = {this.state.buttonDisabled}
                 onClick = {() => this.add()}/>
             </div>

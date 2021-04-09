@@ -58,11 +58,13 @@ class DrinksTable extends Component {
         }
      
       
-     
+      
         return drinkData.map((object) => {
-           var strAble = "False";
-           if(ableData.includes(object)){
-            strAble = "True";
+            
+           var strAble = "True";
+           if(!ableData.includes(object)){
+            strAble = "False";
+          
            }
             return {
                 

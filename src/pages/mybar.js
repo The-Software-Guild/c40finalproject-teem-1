@@ -114,13 +114,13 @@ class MyBar extends Component {
      
       
 //inits both drink and ingredient lists
-
       loadDrinks(){
-        console.log("loaddrinks");
+       
         fetch(ALL_PATH)
           .then(data => data.json())
           .then(data => {
-       
+       this.state.ingredientList =[];
+       this.setState({ingredientList:[]});
             this.setState({drinks: data.drinks});
             data.drinks.map((drink, i) => {
               var ingredients = [
@@ -155,21 +155,20 @@ class MyBar extends Component {
             });
            
             this.setState({
-             ingredientList: this.state.ingredientList
-          }, () => {
-              this.getIngredientsFromDB()
-          })
+             ingredientList: this.state.ingredientList}, () => {this.getIngredientsFromDB()})
        
       
 
               });
+
+              
            
       
       }
+     
       //stores ingredients passed in into the DB
    async storeUserIngredients(i){
   
-
           try{
               let res = await fetch('/store', {
                   method: 'post',
@@ -192,15 +191,14 @@ class MyBar extends Component {
              
           }
       
-      
-  
      }
      
-     getDrinksByIngredients(){
-      console.log("getdrinks by ing");
-   
+     async getDrinksByIngredients(){
+      this.state.ableToMake =[];
+      this.setState({ableToMake: []});
+      console.log("get drinks by ingredients");
       var canMake =[];
-     
+    
       this.state.ingredientList.map((ingredients, i) =>{ 
        var canAdd = true;
       
@@ -218,7 +216,7 @@ class MyBar extends Component {
       
 
        if(canAdd == true && !(this.state.ableToMake.includes(this.state.drinks[i]))){
-          
+         
            canMake.push(this.state.drinks[i]);
           
        }
@@ -228,22 +226,27 @@ class MyBar extends Component {
     
       
 
-   if(canMake.length != 0 ){
+  if(canMake.length != 0 ){
+      
+ console.log(canMake);
+    this.setState({
+      ableToMake: this.state.ableToMake.concat(canMake)});
+
+      
   
-   this.setState({
-     ableToMake: this.state.ableToMake.concat(canMake)})
-  
-   }
-     }
+    }
+   
+  }
   selectFunction = (event) =>{
-       console.log("select");
+      
         let newIngredients = event.map(a => a.value.toLowerCase());
         this.storeUserIngredients(newIngredients);
         this.loadDrinks();
        
     }
   async getIngredientsFromDB(){
-    console.log("DB");
+    this.state.useringredients =[];
+    this.setState({useringredients: []});
       try{
         let res = await fetch('/getingredients', {
             method: 'get',
@@ -257,11 +260,13 @@ class MyBar extends Component {
       
       
       let result = await res.json();
+
      result.map((x, i) =>{ 
         this.state.useringredients.push(x.strName.toLowerCase());
+        
      });
-  
-     this.setState({useringredients: this.state.useringredients}, () => this.getDrinksByIngredients());
+    
+     this.setState({useringredients: this.state.useringredients}, () => { this.getDrinksByIngredients()});
      
     
     
@@ -273,7 +278,8 @@ class MyBar extends Component {
 
 
     getIngredients(){
-   
+      options =[];
+      
       fetch(INGREDIENT_PATH)
         .then(data => data.json())
         .then(data => {

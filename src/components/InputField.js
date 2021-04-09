@@ -3,7 +3,7 @@ class InputField extends React.Component {
 
     render() {
         return (
-            <div className = "inputField">input field
+            <div className = "inputField">
                 <input 
                 className = "input"
                 type = {this.props.type}
